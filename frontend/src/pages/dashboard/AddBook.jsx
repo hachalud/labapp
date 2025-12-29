@@ -4,6 +4,7 @@ import axios from "axios";
 export default function AddBook() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [Isbn, setIsbn] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
 
@@ -16,7 +17,7 @@ export default function AddBook() {
 
       const res = await axios.post(
         "http://localhost:5000/api/books",
-        { title, author, quantity },
+        { title, author, Isbn, quantity },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -29,6 +30,7 @@ export default function AddBook() {
       // Clear form
       setTitle("");
       setAuthor("");
+      setIsbn("");
       setQuantity(1);
     } catch (err) {
       setMessage(err.response?.data?.message || "Error adding book");
@@ -36,11 +38,11 @@ export default function AddBook() {
   };
 
   return (
-    <div className="p-6 bg-white shadow rounded-xl w-full max-w-md">
+    <div className="flex-1 overflow-auto p-6 pt-16 max-w-xl mx-auto">
       <h2 className="text-xl font-bold mb-4 text-center">Add New Book</h2>
 
       {message && (
-        <p className="text-center text-sm text-red-500 mb-4">{message}</p>
+        <p className="text-center text-sm text-green-500 mb-4">{message}</p>
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -57,6 +59,14 @@ export default function AddBook() {
           placeholder="Author"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
+          className="p-2 border rounded-xl"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Isbn"
+          value={Isbn}
+          onChange={(e) => setIsbn(e.target.value)}
           className="p-2 border rounded-xl"
           required
         />

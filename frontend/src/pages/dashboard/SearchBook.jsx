@@ -82,7 +82,7 @@ export default function ApplyRent() {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="flex-1 overflow-auto p-6 pt-16 max-w-xl mx-auto">
       <h2 className="text-xl font-bold mb-4">Apply for Rent</h2>
 
       {/* 🔍 SEARCH AREA ONLY */}

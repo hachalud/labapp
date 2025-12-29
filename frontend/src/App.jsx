@@ -8,17 +8,15 @@ import DashboardHomeRedirect from "./pages/dashboard/DashboardIndex";
 
 
 // Dashboard pages
-import SearchBook from "./pages/dashboard/SearchBook";
 import ApplyRent from "./pages/dashboard/ApplyRent";
-import ReturnBook from "./pages/dashboard/ReturnBook";
 import ApplicationStatus from "./pages/dashboard/ApplicationStatus";
-import SearchCustomer from "./pages/dashboard/SearchCustomer";
-import CheckRequests from "./pages/dashboard/CheckRequests";
+import ReturnBook from "./pages/dashboard/ReturnBook";
 import AddBook from "./pages/dashboard/AddBook";
-import ReferToAdmin from "./pages/dashboard/ReferToAdmin";
-import ApproveAddBook from "./pages/dashboard/ApproveAddBook";
+import CheckRequests from "./pages/dashboard/CheckRequests";
+import SearchCustomer from "./pages/dashboard/SearchCustomer";
 import ApproveRent from "./pages/dashboard/ApproveRent";
 import Create_user from "./pages/dashboard/Create_user";
+import ApproveAddBook from "./pages/dashboard/ApproveAddBook";
 function App() {
   return (
     <Router>
@@ -44,15 +42,7 @@ function App() {
           {/* 🔑 DEFAULT DASHBOARD ROUTE */}
           <Route index element={<DashboardHomeRedirect />} />
 
-          {/* Customer + Employee */}
-          <Route
-            path="search-book"
-            element={
-              <ProtectedRoute allowedRoles={["customer", "employee"]}>
-                <SearchBook />
-              </ProtectedRoute>
-            }
-          />
+          
 
           {/* Customer only */}
           <Route
@@ -64,14 +54,6 @@ function App() {
             }
           />
           <Route
-            path="return-book"
-            element={
-              <ProtectedRoute allowedRoles={["customer"]}>
-                <ReturnBook />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="application-status"
             element={
               <ProtectedRoute allowedRoles={["customer"]}>
@@ -79,13 +61,23 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="return-book"
+            element={
+              <ProtectedRoute allowedRoles={["customer"]}>
+                <ReturnBook />
+              </ProtectedRoute>
+            }
+          />
+          
 
           {/* Employee only */}
+          
           <Route
-            path="search-customer"
+            path="add-book"
             element={
               <ProtectedRoute allowedRoles={["employee"]}>
-                <SearchCustomer />
+                <AddBook />
               </ProtectedRoute>
             }
           />
@@ -97,29 +89,22 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
           <Route
-            path="add-book"
+            path="search-customer"
             element={
               <ProtectedRoute allowedRoles={["employee"]}>
-                <AddBook />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="refer-to-admin"
-            element={
-              <ProtectedRoute allowedRoles={["employee"]}>
-                <ReferToAdmin />
+                <SearchCustomer />
               </ProtectedRoute>
             }
           />
 
           {/* Admin only */}
           <Route
-            path="approve-add-book"
+            path="approve-rent"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <ApproveAddBook />
+                <ApproveRent />
               </ProtectedRoute>
             }
           />
@@ -131,11 +116,12 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
           <Route
-            path="approve-rent"
+            path="approve-add-book"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <ApproveRent />
+                <ApproveAddBook />
               </ProtectedRoute>
             }
           />

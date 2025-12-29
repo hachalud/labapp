@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function ApplicationStatus() {
+function ApplicationStatus() {
   const [rentals, setRentals] = useState([]);
   const user_id = sessionStorage.getItem("user_id");
 
@@ -14,7 +14,7 @@ export default function ApplicationStatus() {
   }, [user_id]);
 
   return (
-    <div className="p-6">
+    <div className="flex-1 overflow-auto p-6 pt-16 max-w-xl mx-auto">
       <h2 className="text-xl font-bold mb-4">Rental Application Status</h2>
 
       <table className="w-full border-collapse border">
@@ -38,3 +38,5 @@ export default function ApplicationStatus() {
     </div>
   );
 }
+export default ApplicationStatus;
+//

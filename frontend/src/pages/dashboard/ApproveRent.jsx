@@ -29,7 +29,7 @@ export default function AdminApproveRent() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="flex-1 overflow-auto p-6 pt-16 max-w-xl mx-auto">
       <h2 className="text-xl font-bold mb-4">Rental Requests (Admin)</h2>
 
       {message && <p className="text-green-600 mb-3">{message}</p>}
@@ -49,13 +49,13 @@ export default function AdminApproveRent() {
 
             <div className="space-x-2">
               <button
-                onClick={() => updateStatus(r.id, "APPROVED")}
-                className="bg-green-600 text-white px-3 py-1 rounded"
+                onClick={() => updateStatus(r.id, "approved")}
+                className="bg-[#010066] text-white px-3 py-1 rounded"
               >
                 Approve
               </button>
               <button
-                onClick={() => updateStatus(r.id, "REJECTED")}
+                onClick={() => updateStatus(r.id, "rejected")}
                 className="bg-red-600 text-white px-3 py-1 rounded"
               >
                 Reject

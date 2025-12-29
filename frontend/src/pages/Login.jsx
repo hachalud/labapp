@@ -32,12 +32,14 @@ export default function Login() {
       }
 
       // Save auth data
-      sessionStorage.setItem("user_id", user_id);
-      sessionStorage.setItem("role", role);
+      sessionStorage.setItem("token", res.data.token);
+      sessionStorage.setItem("user_id", res.data.user_id);
+      sessionStorage.setItem("role", res.data.role);
+
       if (token) sessionStorage.setItem("token", token);
 
       setMessage(serverMessage || "Login successful");
-
+      sessionStorage.setItem("email", username);
       // IMPORTANT:
       // Login does NOT decide pages
       // Dashboard + ProtectedRoute will handle access
