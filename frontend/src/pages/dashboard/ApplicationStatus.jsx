@@ -39,4 +39,3 @@ function ApplicationStatus() {
   );
 }
 export default ApplicationStatus;
-//

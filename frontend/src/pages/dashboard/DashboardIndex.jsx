@@ -4,8 +4,8 @@ export default function DashboardIndex() {
   const role = sessionStorage.getItem("role");
 
   if (role === "customer") return <Navigate to="apply-rent" replace />;
-  if (role === "employee") return <Navigate to="search-customer" replace />;
-  if (role === "admin") return <Navigate to="approve-add-book" replace />;
+  if (role === "employee") return <Navigate to="book-manager" replace />;
+  if (role === "admin") return <Navigate to="approve-rent" replace />;
 
   return <Navigate to="/login" replace />;
 }

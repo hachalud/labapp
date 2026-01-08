@@ -15,19 +15,19 @@ function Signup() {
   // ✅ FRONTEND VALIDATION
   const validate = () => {
     // Name: starts with capital letter
-    const nameRegex = /^[A-Z][a-zA-Z]*$/;
-    if (!nameRegex.test(name)) {
-      return "Name must start with a capital letter and contain only letters";
-    }
+    // const nameRegex = /^[A-Z][a-zA-Z]*$/;
+    // if (!nameRegex.test(name)) {
+    //   return "Name must start with a capital letter and contain only letters";
+    // }
 
     // Phone: starts with 09 and 10 digits
-    const phoneRegex = /^09\d{8}$/;
+    const phoneRegex = /^(09|07)\d{8}$/;
     if (!phoneRegex.test(phone)) {
-      return "Phone must start with 09 and be 10 digits";
+      return "Phone must start with 09 or 07 and be 10 digits";
     }
 
     // Email: gmail.com OR .et OR .gov
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|.+\.et|.+\.gov)$/;
+    const emailRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|.+\.et|.+\.gov)$/;
     if (!emailRegex.test(email)) {
       return "Email must be gmail.com, .et, or .gov";
     }

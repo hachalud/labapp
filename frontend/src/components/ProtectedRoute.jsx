@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-export default function ProtectedRoute({ allowedRoles, children }) {
+function ProtectedRoute({ allowedRoles, children }) {
   const role = sessionStorage.getItem("role");
 
   if (!role) {
@@ -13,3 +13,4 @@ export default function ProtectedRoute({ allowedRoles, children }) {
 
   return children;
 }
+export default ProtectedRoute;

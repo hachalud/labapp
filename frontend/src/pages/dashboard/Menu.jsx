@@ -82,10 +82,7 @@ export default function Layout() {
 
         
       </div>
-      {/* Footer */}
-      <footer className="h-16 bg-gray-200 text-gray-700 flex items-center justify-center shadow-inner">
-        &copy; {new Date().getFullYear()} MyLibrary. All rights reserved.
-      </footer>
+       
 
     </div>
   );

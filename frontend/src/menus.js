@@ -8,6 +8,8 @@ export const menus = [
   { name: "Follow up Rent", path: "/dashboard/check-requests" },
   { name: "Search Customer", path: "/dashboard/search-customer" },
   
+  { name: "Book Manager", path: "/dashboard/book-manager" },
+  
   { name: "Approve Rent", path: "/dashboard/approve-rent" },
   { name: "Create User", path: "/dashboard/create-user" },
  { name: "Remove Book", path: "/dashboard/approve-add-book" },

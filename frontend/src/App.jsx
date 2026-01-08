@@ -17,6 +17,7 @@ import SearchCustomer from "./pages/dashboard/SearchCustomer";
 import ApproveRent from "./pages/dashboard/ApproveRent";
 import Create_user from "./pages/dashboard/Create_user";
 import ApproveAddBook from "./pages/dashboard/ApproveAddBook";
+import BookManager from "./pages/dashboard/BookManager";
 function App() {
   return (
     <Router>
@@ -86,6 +87,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["employee"]}>
                 <CheckRequests />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="book-manager"
+            element={
+              <ProtectedRoute allowedRoles={["employee"]}>
+                <BookManager />
               </ProtectedRoute>
             }
           />

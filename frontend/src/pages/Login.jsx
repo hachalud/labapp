@@ -35,11 +35,11 @@ export default function Login() {
       sessionStorage.setItem("token", res.data.token);
       sessionStorage.setItem("user_id", res.data.user_id);
       sessionStorage.setItem("role", res.data.role);
-
+      sessionStorage.setItem("email", username);
       if (token) sessionStorage.setItem("token", token);
 
       setMessage(serverMessage || "Login successful");
-      sessionStorage.setItem("email", username);
+      
       // IMPORTANT:
       // Login does NOT decide pages
       // Dashboard + ProtectedRoute will handle access

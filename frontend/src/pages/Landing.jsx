@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/resource.png"
 
  function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+   <>
+   <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      
       <div className="bg-white shadow-lg rounded-2xl p-10 flex flex-col items-center gap-6">
         <h1 className="text-3xl font-bold text-center">Welcome to Book Rental System</h1>
         <p className="text-center text-gray-600">
@@ -28,6 +31,8 @@ import { useNavigate } from "react-router-dom";
         </div>
       </div>
     </div>
+    </>
   );
+
 }
 export default Landing;

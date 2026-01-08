@@ -5,21 +5,21 @@ export default function ApplyRent() {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
-  const [selectedBook, setSelectedBook] = useState(null);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // success | error | warning | info
+  const [messageType, setMessageType] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const itemsPerPage = 10;
   const searchRef = useRef(null);
   const token = sessionStorage.getItem("token");
 
-  // Fetch all available books
+  // Fetch books
   useEffect(() => {
     async function fetchBooks() {
       try {
         const res = await axios.get("http://localhost:5000/api/books");
         setBooks(res.data.filter((b) => b.quantity > 0));
       } catch (err) {
-        console.error(err);
         setMessage("Error fetching books");
         setMessageType("error");
       }
@@ -27,29 +27,31 @@ export default function ApplyRent() {
     fetchBooks();
   }, []);
 
-  // Click outside search/results resets search/results
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setSearch("");
-        setResults([]);
-        setMessage("");
-        setMessageType("");
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // Handle outside click
+  // useEffect(() => {
+  //   const handleClickOutside = (e) => {
+  //     if (searchRef.current && !searchRef.current.contains(e.target)) {
+  //       setSearch("");
+  //       setResults([]);
+  //       setMessage("");
+  //       setMessageType("");
+  //     }
+  //   };
 
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
+
+  // Search handler
   const handleSearch = () => {
-    if (!search.trim()) {
-      setMessage("Please enter book title or ISBN");
-      setMessageType("warning");
-      return;
-    }
     setMessage("");
     setMessageType("");
-    setSelectedBook(null);
+    setCurrentPage(1);
+
+    if (!search.trim()) {
+      setResults(books);
+      return;
+    }
 
     const filtered = books.filter(
       (b) =>
@@ -65,43 +67,31 @@ export default function ApplyRent() {
     setResults(filtered);
   };
 
-  const handleSelectBook = (book) => {
-    setSelectedBook(book);
-    setResults([]);
-    setMessage("");
-    setMessageType("");
-  };
+  // Rent handler
+  const handleRent = async (book) => {
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/rentals",
+      { book_id: book.id },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-  const handleRent = async () => {
-    if (!selectedBook) {
-      setMessage("Please select a book first");
-      setMessageType("warning");
-      return;
-    }
+    setMessage(res.data.message || "Rental request submitted successfully");
+    setMessageType("success");
+  } catch (err) {
+    setMessage(err.response?.data?.message || "Error submitting rental");
+    setMessageType("error");
+  }
+};
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/rentals",
-        { book_id: selectedBook.id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
 
-      setMessage(res.data.message || "Rental request submitted successfully");
-      setMessageType("success");
-      setSelectedBook(null);
-      setSearch("");
-      setResults([]);
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Error submitting rental");
-      setMessageType("error");
-    }
-  };
+  // Pagination
+  const totalPages = Math.ceil(results.length / itemsPerPage);
+  const paginatedBooks = results.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
-  // Map message type to Tailwind classes
   const messageClasses = {
     success: "text-green-600",
     error: "text-red-600",
@@ -110,61 +100,94 @@ export default function ApplyRent() {
   };
 
   return (
-    <div className="flex-1 overflow-auto p-6 max-w-xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Apply for Rent</h2>
+    <div className="flex-1 overflow-auto p-6 w-full mx-auto ">
+      <h2 className="text-xl text-center font-bold mb-4">Apply for Rent</h2>
 
-      {/* Search Input + Results */}
-      <div ref={searchRef}>
-        <input
-          type="text"
-          placeholder="Search by title or ISBN"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border p-2 w-full rounded mb-2"
-        />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-600 text-white px-4 py-2 rounded w-full mb-3"
-        >
-          Search Book
-        </button>
+      {/* Search */}
+      <div ref={searchRef} className="mb-4 max-w-xl mx-auto">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Search by title or ISBN"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 border max-w-xl mx-auto border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="bg-blue-600 text-white px-4 rounded"
+          >
+            Search
+          </button>
+        </div>
 
         {message && (
-          <p className={`text-sm mb-3 ${messageClasses[messageType]}`}>
+          <p className={`text-sm mt-2 ${messageClasses[messageType]}`}>
             {message}
           </p>
         )}
-
-        {results.map((book) => (
-          <div
-            key={book.id}
-            onClick={() => handleSelectBook(book)}
-            className="border p-3 rounded cursor-pointer hover:bg-gray-50 mb-2"
-          >
-            <p className="font-semibold">{book.title}</p>
-            <p className="text-sm">ISBN: {book.Isbn}</p>
-            <p className="text-sm">Available: {book.quantity}</p>
-          </div>
-        ))}
       </div>
 
-      {/* Selected Book */}
-      {selectedBook && (
-        <div className="mt-4 p-4 border-2 border-green-600 rounded bg-green-50">
-          <p className="font-semibold">{selectedBook.title}</p>
-          <p className="text-sm">ISBN: {selectedBook.Isbn}</p>
-          <p className="text-sm">Available: {selectedBook.quantity}</p>
+      {/* Table */}
+      {paginatedBooks.length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full border border-gray-300 text-sm">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="border p-2 text-left">Title</th>
+                <th className="border p-2">ISBN</th>
+                <th className="border p-2">quantity</th>
+                <th className="border p-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedBooks.map((book) => (
+                <tr key={book.id} className="hover:bg-gray-50">
+                  <td className="border p-2">{book.title}</td>
+                  <td className="border p-2 text-center">{book.Isbn}</td>
+                  <td className="border p-2 text-center">{book.quantity}</td>
+                  <td className="border p-2 text-center">
+                    <button
+                      type="button"
+                      onClick={() => handleRent(book)}
+                      disabled={book.quantity === 0}
+                      className="bg-green-600 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                    >
+                      Submit Request
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
-      {/* Submit Button */}
-      <button
-        onClick={handleRent}
-        disabled={!selectedBook}
-        className="bg-green-600 text-white px-4 py-2 rounded w-full mt-4 disabled:opacity-50"
-      >
-        Submit Rental Request
-      </button>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-3 mt-4">
+          <button
+            onClick={() => setCurrentPage((p) => p - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          <span className="text-sm">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
